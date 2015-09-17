@@ -15,7 +15,13 @@ namespace FDD.Akka
             {
                 var recognizedAttachmentsContents = emailMessage.Attachments
                     .Select(attachment => ocr.Scan(attachment.Path))
-                    .ToArray();               
+                    .ToArray();
+
+                var claims = recognizedAttachmentsContents
+                    .Select(claimScanner.Scan)
+                    .Where(result => result.Success)
+                    .Select(result => result.Claim)
+                    .ToList();
             }
         }
     }
