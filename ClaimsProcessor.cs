@@ -10,6 +10,13 @@ namespace FDD.Akka
         public void Process(IMailClient mailClient, IOpticalCharacterRecognizer ocr, IClaimScanner claimScanner, IClaimManagementSystem claimManagement)
         {
             var emails = mailClient.ReadMessages();
+
+            foreach (var emailMessage in emails)
+            {
+                var recognizedAttachmentsContents = emailMessage.Attachments
+                    .Select(attachment => ocr.Scan(attachment.Path))
+                    .ToArray();               
+            }
         }
     }
 }
