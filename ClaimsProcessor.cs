@@ -22,6 +22,11 @@ namespace FDD.Akka
                     .Where(result => result.Success)
                     .Select(result => result.Claim)
                     .ToList();
+
+                foreach (var claim in claims)
+                {
+                    claimManagement.Upload(claim);
+                }
             }
         }
     }
