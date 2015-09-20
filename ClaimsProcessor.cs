@@ -29,9 +29,16 @@ namespace FDD.Akka
                 var claims = new List<Claim>();
                 foreach (var recognizedAttachmentsContent in recognizedAttachmentsContents)
                 {
-                    var scanResult = claimScanner.Scan(recognizedAttachmentsContent);
-                    if (scanResult.Success)
-                        claims.Add(scanResult.Claim);
+                    try
+                    {
+                        var scanResult = claimScanner.Scan(recognizedAttachmentsContent);
+                        if (scanResult.Success)
+                            claims.Add(scanResult.Claim);
+                    }
+                    catch (Exception e)
+                    {
+                        ProcessFailedClaim(recognizedAttachmentsContent, e);
+                    }
                 }
 
                 foreach (var claim in claims)
@@ -39,6 +46,11 @@ namespace FDD.Akka
                     claimManagement.Upload(claim);
                 }
             }
+        }
+
+        private void ProcessFailedClaim(string recognizedAttachmentsContent, Exception exception)
+        {
+            // TODO: failed claim error handling
         }
 
         private void ProcessFailedAttachment(Attachment attachment, Exception exception)
