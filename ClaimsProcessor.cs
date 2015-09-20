@@ -45,7 +45,21 @@ namespace FDD.Akka
 
                 foreach (var claim in claims)
                 {
-                    claimManagement.Upload(claim);
+                    int retryCount = 3;
+                    while (true)
+                    {
+                        try
+                        {
+                            claimManagement.Upload(claim);
+                        }
+                        catch (Exception)
+                        {
+                            retryCount--;
+                            if (retryCount < 0)
+                                throw;
+
+                        }
+                    }
                 }
             }
         }
