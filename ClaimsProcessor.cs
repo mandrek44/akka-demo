@@ -34,6 +34,8 @@ namespace FDD.Akka
                         var scanResult = claimScanner.Scan(recognizedAttachmentsContent);
                         if (scanResult.Success)
                             claims.Add(scanResult.Claim);
+                        else
+                            throw new Exception("Unable to find claim in attachment");
                     }
                     catch (Exception e)
                     {
