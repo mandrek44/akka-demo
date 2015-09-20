@@ -13,9 +13,18 @@ namespace FDD.Akka
 
             foreach (var emailMessage in emails)
             {
-                var recognizedAttachmentsContents = emailMessage.Attachments
-                    .Select(attachment => ocr.Scan(attachment.Path))
-                    .ToArray();
+                var recognizedAttachmentsContents = new List<string>();
+                foreach (var attachment in emailMessage.Attachments)
+                {
+                    try
+                    {
+                        recognizedAttachmentsContents.Add(ocr.Scan(attachment.Path));
+                    }
+                    catch (Exception e)
+                    {
+                        ProcessFailedAttachment(attachment, e);
+                    }
+                }
 
                 var claims = recognizedAttachmentsContents
                     .Select(claimScanner.Scan)
@@ -28,6 +37,11 @@ namespace FDD.Akka
                     claimManagement.Upload(claim);
                 }
             }
+        }
+
+        private void ProcessFailedAttachment(Attachment attachment, Exception exception)
+        {
+            // TODO: failed attachment error handling
         }
     }
 }
