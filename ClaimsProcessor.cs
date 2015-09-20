@@ -26,11 +26,13 @@ namespace FDD.Akka
                     }
                 }
 
-                var claims = recognizedAttachmentsContents
-                    .Select(claimScanner.Scan)
-                    .Where(result => result.Success)
-                    .Select(result => result.Claim)
-                    .ToList();
+                var claims = new List<Claim>();
+                foreach (var recognizedAttachmentsContent in recognizedAttachmentsContents)
+                {
+                    var scanResult = claimScanner.Scan(recognizedAttachmentsContent);
+                    if (scanResult.Success)
+                        claims.Add(scanResult.Claim);
+                }
 
                 foreach (var claim in claims)
                 {
