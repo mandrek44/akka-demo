@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FDD.Akka.Infrastructure;
 
 namespace FDD.Akka
@@ -57,7 +58,8 @@ namespace FDD.Akka
                             retryCount--;
                             if (retryCount < 0)
                                 throw;
-
+                            else
+                                Thread.Sleep(5000);
                         }
                     }
                 }
