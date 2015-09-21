@@ -17,7 +17,8 @@ namespace FDD.Akka
 
     class ClaimsProcessingDirector : ReceiveActor
     {
-        public ClaimsProcessingDirector(IActorRef attachmentScanner)
+        public ClaimsProcessingDirector(IActorRef attachmentScanner,
+            IActorRef claimScanner)
         {
             Receive<MailReceived>(message =>
             {
@@ -26,7 +27,8 @@ namespace FDD.Akka
             });
 
             Receive<AttachmentScanned>(message =>
-            {                
+            {
+                claimScanner.Tell(new ScanClaim(message.AttachmentContent));
             });
         }
     }
