@@ -14,17 +14,14 @@ namespace FDD.Akka
             });
         }
     }
-    class AttachmentScanned
+
+    class ClaimsProcessingDirector : ReceiveActor
     {
-        public string AttachmentContent { get; }
-
-        public AttachmentScanned(string attachmentContent) { AttachmentContent = attachmentContent; }
-    }
-
-    class ScanAttachment
-    {
-        public Attachment Attachment { get; }
-
-        public ScanAttachment(Attachment attachment) { Attachment = attachment; }
+        public ClaimsProcessingDirector()
+        {
+            Receive<MailReceived>(message =>
+            {
+            });
+        }
     }
 }
