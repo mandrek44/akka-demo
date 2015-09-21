@@ -41,4 +41,11 @@ namespace FDD.Akka.Infrastructure
 
         public ScanClaim(string attachmentContent) { AttachmentContent = attachmentContent; }
     }
+
+    public class UploadClaim
+    {
+        public Claim Claim { get; }
+
+        public UploadClaim(Claim claim) { Claim = claim; }
+    }
 }

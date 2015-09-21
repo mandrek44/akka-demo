@@ -18,7 +18,8 @@ namespace FDD.Akka
     class ClaimsProcessingDirector : ReceiveActor
     {
         public ClaimsProcessingDirector(IActorRef attachmentScanner,
-            IActorRef claimScanner)
+            IActorRef claimScanner,
+            IActorRef claimManagementSystem)
         {
             Receive<MailReceived>(message =>
             {
@@ -29,6 +30,11 @@ namespace FDD.Akka
             Receive<AttachmentScanned>(message =>
             {
                 claimScanner.Tell(new ScanClaim(message.AttachmentContent));
+            });
+
+            Receive<ClaimDetected>(message =>
+            {
+                claimManagementSystem.Tell(new UploadClaim(message.Claim));
             });
         }
     }
@@ -42,6 +48,17 @@ namespace FDD.Akka
                 var scanResult = claimScanner.Scan(message.AttachmentContent);
                 if (scanResult.Success)
                     Sender.Tell(new ClaimDetected(scanResult.Claim));
+            });
+        }
+    }
+
+    internal class ClaimManagementSystemActor : ReceiveActor
+    {
+        public ClaimManagementSystemActor(IClaimManagementSystem claimManagementSystem)
+        {
+            Receive<UploadClaim>(message =>
+            {
+                claimManagementSystem.Upload(message.Claim);
             });
         }
     }
