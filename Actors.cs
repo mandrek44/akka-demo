@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using FDD.Akka.Infrastructure;
 
 namespace FDD.Akka
 {
@@ -10,5 +11,12 @@ namespace FDD.Akka
             {
             });
         }
+    }
+
+    class ScanAttachment
+    {
+        public Attachment Attachment { get; }
+
+        public ScanAttachment(Attachment attachment) { Attachment = attachment; }
     }
 }
