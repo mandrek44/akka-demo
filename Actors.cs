@@ -35,10 +35,13 @@ namespace FDD.Akka
 
     class ClaimScannerActor : ReceiveActor
     {
-        public ClaimScannerActor()
+        public ClaimScannerActor(IClaimScanner claimScanner)
         {
             Receive<ScanClaim>(message =>
             {
+                var scanResult = claimScanner.Scan(message.AttachmentContent);
+                if (scanResult.Success)
+                    Sender.Tell(new ClaimDetected(scanResult.Claim));
             });
         }
     }
