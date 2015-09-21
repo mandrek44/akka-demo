@@ -24,6 +24,10 @@ namespace FDD.Akka
                 foreach (var attachment in message.Attachments)
                     attachmentScanner.Tell(new ScanAttachment(attachment));
             });
+
+            Receive<AttachmentScanned>(message =>
+            {                
+            });
         }
     }
 }
