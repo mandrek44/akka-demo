@@ -32,4 +32,14 @@ namespace FDD.Akka
             });
         }
     }
+
+    class ClaimScannerActor : ReceiveActor
+    {
+        public ClaimScannerActor()
+        {
+            Receive<ScanClaim>(message =>
+            {
+            });
+        }
+    }
 }
