@@ -10,8 +10,15 @@ namespace FDD.Akka
             Receive<ScanAttachment>(message =>
             {
                 var attachmentContent = ocr.Scan(message.Attachment.Path);
+                Sender.Tell(new AttachmentScanned(attachmentContent));
             });
         }
+    }
+    class AttachmentScanned
+    {
+        public string AttachmentContent { get; }
+
+        public AttachmentScanned(string attachmentContent) { AttachmentContent = attachmentContent; }
     }
 
     class ScanAttachment
