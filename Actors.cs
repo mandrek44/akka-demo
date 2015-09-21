@@ -17,10 +17,12 @@ namespace FDD.Akka
 
     class ClaimsProcessingDirector : ReceiveActor
     {
-        public ClaimsProcessingDirector()
+        public ClaimsProcessingDirector(IActorRef attachmentScanner)
         {
             Receive<MailReceived>(message =>
             {
+                foreach (var attachment in message.Attachments)
+                    attachmentScanner.Tell(new ScanAttachment(attachment));
             });
         }
     }
