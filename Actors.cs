@@ -5,10 +5,11 @@ namespace FDD.Akka
 {
     class AttachmentScannerActor : ReceiveActor
     {
-        public AttachmentScannerActor()
+        public AttachmentScannerActor(IOpticalCharacterRecognizer ocr)
         {
             Receive<ScanAttachment>(message =>
             {
+                var attachmentContent = ocr.Scan(message.Attachment.Path);
             });
         }
     }
