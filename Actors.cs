@@ -17,10 +17,15 @@ namespace FDD.Akka
 
     class ClaimsProcessingDirector : ReceiveActor
     {
+        private readonly IActorRef _mailMonitor;
+
         public ClaimsProcessingDirector(IActorRef attachmentScanner,
             IActorRef claimScanner,
-            IActorRef claimManagementSystem)
+            IActorRef claimManagementSystem,
+            IActorRef mailMonitor)
         {
+            _mailMonitor = mailMonitor;
+
             Receive<MailReceived>(message =>
             {
                 foreach (var attachment in message.Attachments)
@@ -36,6 +41,16 @@ namespace FDD.Akka
             {
                 claimManagementSystem.Tell(new UploadClaim(message.Claim));
             });
+        }
+
+        protected override void PreStart()
+        {
+            _mailMonitor.Tell(MailMonitorPrompter.StartObserving.Message);
+        }
+
+        protected override void PostStop()
+        {
+            _mailMonitor.Tell(MailMonitorPrompter.StopObserving.Message);
         }
     }
 
