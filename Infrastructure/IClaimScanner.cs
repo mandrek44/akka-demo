@@ -4,4 +4,16 @@ namespace FDD.Akka.Infrastructure
     {
         ScanResult Scan(string attachment);
     }
+
+    class FakeClaimScanner : IClaimScanner
+    {
+        public ScanResult Scan(string attachment)
+        {
+            return new ScanResult()
+            {
+                Claim = new Claim() {ClaimId = RandomString.Next(8)},
+                Success = true
+            };
+        }
+    }
 }

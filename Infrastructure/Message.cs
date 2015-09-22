@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.DI.Core;
+using Akka.Routing;
 
 namespace FDD.Akka.Infrastructure
 {
@@ -11,35 +12,35 @@ namespace FDD.Akka.Infrastructure
         public IEnumerable<Attachment> Attachments { get; set; }
     }
 
-    class AttachmentScanned
+    public class AttachmentScanned
     {
         public string AttachmentContent { get; }
 
         public AttachmentScanned(string attachmentContent) { AttachmentContent = attachmentContent; }
     }
 
-    class ScanAttachment
+    public class ScanAttachment
     {
         public Attachment Attachment { get; }
 
         public ScanAttachment(Attachment attachment) { Attachment = attachment; }
     }
 
-    class MailReceived
+    public class MailReceived
     {
         public IEnumerable<Attachment> Attachments { get; }
 
         public MailReceived(IEnumerable<Attachment> attachments) { Attachments = attachments; }
     }
 
-    class ClaimDetected
+    public class ClaimDetected
     {
         public Claim Claim { get; }
 
         public ClaimDetected(Claim claim) { Claim = claim; }
     }
 
-    class ScanClaim
+    public class ScanClaim
     {
         public string AttachmentContent { get; }
 
@@ -58,7 +59,7 @@ namespace FDD.Akka.Infrastructure
         protected override void PreStart()
         {
             var attachmentScanner = Context.ActorOf(
-                Context.DI().Props<AttachmentScannerActor>(), "attachmentScanner");
+                Context.DI().Props<AttachmentScannerActor>().WithRouter(FromConfig.Instance), "attachmentScanner");
             var claimsScanner = Context.ActorOf(
                 Context.DI().Props<ClaimScannerActor>(), "claimsScanner");
             var claimManagementSystem = Context.ActorOf(
@@ -68,12 +69,12 @@ namespace FDD.Akka.Infrastructure
 
             var claimProcessor = Context.ActorOf(
                 Props.Create(() =>
-                    new ClaimsProcessingDirector(attachmentScanner, claimsScanner, mailMonitor, claimManagementSystem)), 
+                    new ClaimsProcessingDirector(attachmentScanner, claimsScanner, claimManagementSystem, mailMonitor)), 
                 "claimProcessor");
         }
     }
 
-    class MailMonitorPrompter : ReceiveActor
+    public class MailMonitorPrompter : ReceiveActor
     {
         private readonly IMailClient _mailClient;
         private readonly HashSet<IActorRef> _mailObservers = new HashSet<IActorRef>();

@@ -1,9 +1,10 @@
 ﻿using Akka.Actor;
+using Akka.Event;
 using FDD.Akka.Infrastructure;
 
 namespace FDD.Akka
 {
-    class AttachmentScannerActor : ReceiveActor
+    class AttachmentScannerActor : LoggingReceiveActor
     {
         public AttachmentScannerActor(IOpticalCharacterRecognizer ocr)
         {
@@ -15,7 +16,18 @@ namespace FDD.Akka
         }
     }
 
-    class ClaimsProcessingDirector : ReceiveActor
+    class LoggingReceiveActor : ReceiveActor
+    {
+        protected readonly ILoggingAdapter Log = Context.GetLogger();
+
+        protected override bool AroundReceive(Receive receive, object message)
+        {
+            Log.Info($"{Self.Path.Name} received {message.GetType().Name}" );
+            return base.AroundReceive(receive, message);
+        }
+    }
+
+    class ClaimsProcessingDirector : LoggingReceiveActor
     {
         private readonly IActorRef _mailMonitor;
 
@@ -54,7 +66,7 @@ namespace FDD.Akka
         }
     }
 
-    class ClaimScannerActor : ReceiveActor
+    class ClaimScannerActor : LoggingReceiveActor
     {
         public ClaimScannerActor(IClaimScanner claimScanner)
         {
@@ -67,7 +79,7 @@ namespace FDD.Akka
         }
     }
 
-    internal class ClaimManagementSystemActor : ReceiveActor
+    internal class ClaimManagementSystemActor : LoggingReceiveActor
     {
         public ClaimManagementSystemActor(IClaimManagementSystem claimManagementSystem)
         {
