@@ -11,7 +11,7 @@ namespace FDD.Akka.Infrastructure
 
     class FakeMailClient : IMailClient
     {
-        private readonly Random _random = new Random();
+        private readonly Random _random = new Random(128);
         private DateTime _nextRead = DateTime.MinValue;
 
         public IEnumerable<Message> ReadMessages()

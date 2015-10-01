@@ -59,7 +59,9 @@ namespace FDD.Akka.Infrastructure
         protected override void PreStart()
         {
             var attachmentScanner = Context.ActorOf(
-                Context.DI().Props<AttachmentScannerActor>().WithRouter(FromConfig.Instance), "attachmentScanner");
+                Context.DI().Props<AttachmentScannerActor>()
+                //.WithRouter(FromConfig.Instance)
+                , "attachmentScanner");
             var claimsScanner = Context.ActorOf(
                 Context.DI().Props<ClaimScannerActor>(), "claimsScanner");
             var claimManagementSystem = Context.ActorOf(
