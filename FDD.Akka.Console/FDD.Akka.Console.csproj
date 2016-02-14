@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CFC6EB46-11AE-4898-89FA-0337578EC1C7}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{44378153-B594-4089-8B73-C50559BCEC70}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FDD.Akka</RootNamespace>
-    <AssemblyName>FDD.Akka</AssemblyName>
+    <RootNamespace>FDD.Akka.Console</RootNamespace>
+    <AssemblyName>FDD.Akka.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,27 +34,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Akka, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Akka.1.0.4\lib\net45\Akka.dll</HintPath>
+      <HintPath>..\packages\Akka.1.0.4\lib\net45\Akka.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.DI.AutoFac, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Akka.DI.AutoFac.1.0.4\lib\net45\Akka.DI.AutoFac.dll</HintPath>
+      <HintPath>..\packages\Akka.DI.AutoFac.1.0.4\lib\net45\Akka.DI.AutoFac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Akka.DI.Core, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Akka.DI.Core.1.0.4\lib\net45\Akka.DI.Core.dll</HintPath>
+      <HintPath>..\packages\Akka.DI.Core.1.0.4\lib\net45\Akka.DI.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Akka.Logger.NLog, Version=1.0.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.Logger.NLog.1.0.4\lib\net45\Akka.Logger.NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=3.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>packages\NLog.3.0.0.0\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.3.0.0.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -64,28 +71,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors.cs" />
-    <Compile Include="Infrastructure\Attachment.cs" />
-    <Compile Include="Infrastructure\Claim.cs" />
-    <Compile Include="ClaimsProcessor.cs" />
-    <Compile Include="Infrastructure\ScanResult.cs" />
-    <Compile Include="Infrastructure\IClaimManagementSystem.cs" />
-    <Compile Include="Infrastructure\IClaimScanner.cs" />
-    <Compile Include="Infrastructure\IMailClient.cs" />
-    <Compile Include="Infrastructure\IOpticalCharacterRecognizer.cs" />
-    <Compile Include="Infrastructure\Message.cs" />
-    <Compile Include="Infrastructure\OCRException.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Infrastructure\ScannerException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="gulpfile.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="package.json" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FDD.Akka\FDD.Akka.csproj">
+      <Project>{cfc6eb46-11ae-4898-89fa-0337578ec1c7}</Project>
+      <Name>FDD.Akka</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
